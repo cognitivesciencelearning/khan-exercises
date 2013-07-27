@@ -22,16 +22,17 @@
                 <var id="SIMPLECONSTANT">A*B</var>
                 <var id="LINEAR">SQUARE*(-A-B)</var>
                 <var id="SIMPLELINEAR">-A-B</var>
+                <var id="AND_TEXT">$._("and")</var>
             </div>
 
-            <p class="problem">Determine where <code>f(x)</code> intersects the <code>x</code>-axis.</p>
-            <p class="question"><code>f(x) = <var>plus(SQUARE + "x^2")</var> + <var>plus( LINEAR + "x" )</var> + <var>CONSTANT</var></code></p>
+            <p class="question">Solve for <code>x</code>:</p>
+            <p class="problem"><code><var>plus(SQUARE + "x^2")</var> + <var>plus( LINEAR + "x" )</var> + <var>CONSTANT</var> = 0</code></p>
 
             <div class="solution" data-type="set">
                 <div class="set-sol"><var>A</var></div>
                 <div class="set-sol"><var>B</var></div>
                 <div class="input-format"><p style="font-size: 12px;">
-                    <code>x = {}</code><span class="entry short35" data-forms="integer"></span><code>\space \text{and}\space x = {}</code><span class="entry short35" data-forms="integer"></span>
+                    <code>x = {}</code><span class="entry short35" data-forms="integer"></span><code>\space \text{<var>AND_TEXT</var>}\space x = {}</code><span class="entry short35" data-forms="integer"></span>
                 </p></div>
             </div>
 
@@ -48,13 +49,13 @@
                     </code></p>
                 </div>
                 <p>
-                    So <code>(x <var>A &lt; 0 ? "+" : ""</var> \color{<var>PINK</var>}{<var>-A</var>})
-                    (x <var>B &lt; 0 ? "+" : ""</var> \color{<var>PINK</var>}{<var>-B</var>}) = 0</code>.
+                    <code>(x <var>A &lt; 0 ? "+" : ""</var> \color{<var>PINK</var>}{<var>-A</var>})
+                    (x <var>B &lt; 0 ? "+" : ""</var> \color{<var>PINK</var>}{<var>-B</var>}) = 0</code>
                 </p>
                 <p>
-                    Since <code>(x <var>A &lt; 0 ? "+" : ""</var> <var>-A</var>)
-                    (x <var>B &lt; 0 ? "+" : ""</var> <var>-B</var>) = 0</code>,
-                    we know that one or both quantities must equal zero for the equation to be true.
+                    <span>Since the following equation is true we know that one or both quantities must equal zero.</span>
+                    <code>(x <var>A &lt; 0 ? "+" : ""</var> <var>-A</var>)
+                    (x <var>B &lt; 0 ? "+" : ""</var> <var>-B</var>) = 0</code>
                 </p>
                 <p><code>x + <var>-A</var> = 0</code> or <code>x + <var>-B</var> = 0</code></p>
                 <p>Thus, <code>x = <var>A</var></code> and <code>x = <var>B</var></code> are the solutions.</p>
@@ -69,8 +70,8 @@
                 <var id="LINEAR">SQUARE * ( -2 * A )</var>
                 <var id="SIMPLELINEAR">-2 * A</var>
             </div>
-            <p class="problem">Determine where <code>f(x)</code> intersects the x-axis.</p>
-            <p class="question"><code>f(x) = <var>plus( SQUARE + "x^2")</var> + <var>plus( LINEAR + "x" )</var> + <var>CONSTANT</var></code></p>
+            <p class="question">Solve for <code>x</code>:</p>
+            <p class="problem"><code><var>plus( SQUARE + "x^2")</var> + <var>plus( LINEAR + "x" )</var> + <var>CONSTANT</var> = 0</code></p>
             <div class="solution" data-type="multiple">
                 <p><code>x = \quad</code><span class="sol short35" data-forms="integer"><var>A</var></span></p>
             </div>
@@ -86,7 +87,7 @@
                         \color{<var>BLUE</var>}{<var>SIMPLECONSTANT</var>}
                     </code></p>
                 </div>
-                <p>So <code>(x <var>A &lt; 0 ? "+" : ""</var> \color{<var>PINK</var>}{<var>-A</var>})^2 = 0</code>.</p>
+                <p data-if="A < 0">So <code>(x + \color{<var>PINK</var>}{<var>-A</var>})^2 = 0</code>.</p><p data-else="">So <code>(x  \color{<var>PINK</var>}{<var>-A</var>})^2 = 0</code>.</p>
                 <p><code>x + <var>-A</var> = 0</code></p>
                 <p>Thus, <code>x = <var>A</var></code> is the solution.</p>
             </div>
@@ -94,18 +95,6 @@
     </div>
 
     <div class="hints">
-        <div>
-            <p>The function intersects the <code>x</code>-axis where <code>f(x) = 0</code>, so solve the equation:</p>
-            <p><code>
-                \qquad
-                <var>plus( SQUARE + "x^2" )</var>
-                <var>LINEAR &gt;= 0 ? "+" : ""</var>
-                <var>plus( "\\color{" + GREEN + "}{" + LINEAR + "}x" )</var>
-                <var>CONSTANT &gt;= 0 ? "+" : ""</var>
-                <var>plus( "\\color{" + BLUE + "}{" + CONSTANT + "}" )</var>
-                = 0</code></p>
-        </div>
-
         <div data-if="SQUARE > 1">
             <p>Dividing both sides by <var>SQUARE</var> gives:</p>
             <p><code>x^2 + <var> plus(SIMPLELINEAR + "x")</var> + <var>SIMPLECONSTANT</var>=0</code></p>

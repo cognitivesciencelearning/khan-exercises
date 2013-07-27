@@ -34,7 +34,11 @@ $.tmpl = {
             value = value && $.tmpl.getVAR(value);
 
             // Save the result of this data-if in the next sibling for data-else-if and data-else
-            $elem.next().data("lastCond", value);
+            // Only save the value if no previous value has been set
+            var $nextElem = $elem.next();
+            if ($nextElem.data("lastCond") === undefined) {
+                $nextElem.data("lastCond", value);
+            }
 
             if (!value) {
                 // Delete the element if the data-if evaluated to false
@@ -51,7 +55,11 @@ $.tmpl = {
             value = !lastCond && value && $.tmpl.getVAR(value);
 
             // Succeeding elements care about the visibility of both me and my preceding siblings
-            $elem.next().data("lastCond", lastCond || value);
+            // Only save the value if no previous value has been set
+            var $nextElem = $elem.next();
+            if ($nextElem.data("lastCond") === undefined) {
+                $nextElem.data("lastCond", lastCond || value);
+            }
 
             if (!value) {
                 // Delete the element if appropriate
@@ -119,8 +127,8 @@ $.tmpl = {
             youtubeIds = youtubeIds.split(/,\s*/);
 
             var author = $(elem).data("video-hint-author") || "Sal";
-            var msg = "Watch " + author +
-                      " work through a very similar problem:";
+            var msg = $._("Watch %(author)s work through a very similar " +
+                "problem:", {author: author});
             var preface = $("<p>").text(msg);
 
             var wrapper = $("<div>", { "class": "video-hint" });
@@ -204,47 +212,6 @@ $.tmpl = {
                     return div.html(html.slice(0, -1)).contents();
                 }
             }
-        },
-
-        code: function(elem) {
-            // Returns a function in order to run after other templating and var assignment
-            return function(elem) {
-                if (typeof elem.MathJax === "undefined") {
-                    var $elem = $(elem);
-
-                    // Maintain the classes from the original element
-                    if (elem.className) {
-                        $elem.wrap("<span class='" + elem.className + "'></span>");
-                    }
-
-                    // Trick MathJax into thinking that we're dealing with a script block
-                    elem.type = "math/tex";
-
-                    // Make sure that the old value isn't being displayed anymore
-                    elem.style.display = "none";
-
-                    // Clean up any strange mathematical expressions
-                    var text = $elem.text();
-                    $elem.text(KhanUtil.cleanMath ? KhanUtil.cleanMath(text) : text);
-
-                    // Stick the processing request onto the queue
-                    if (typeof MathJax !== "undefined") {
-                        KhanUtil.debugLog("adding " + text + " to MathJax typeset queue");
-                        MathJax.Hub.Queue(["Typeset", MathJax.Hub, elem]);
-                        MathJax.Hub.Queue(function() {
-                            KhanUtil.debugLog("MathJax done typesetting " + text);
-                        });
-                    } else {
-                        KhanUtil.debugLog("not adding " + text + " to queue because MathJax is undefined");
-                    }
-                } else {
-                    KhanUtil.debugLog("reprocessing MathJax: " + text);
-                    MathJax.Hub.Queue(["Reprocess", MathJax.Hub, elem]);
-                    MathJax.Hub.Queue(function() {
-                        KhanUtil.debugLog("MathJax done reprocessing " + text);
-                    });
-                }
-            };
         }
     },
 
@@ -261,7 +228,7 @@ $.tmpl = {
             ctx = {};
         }
 
-        try {
+        function doEval() {
             // Use the methods from JavaScript's built-in Math methods
             with (Math) {
                 // And the methods provided by the library
@@ -275,21 +242,29 @@ $.tmpl = {
                     }
                 }
             }
+        }
 
-        } catch (e) {
-            var info;
+        if (Khan.query.debug != null) {
+            // Skip try-catch in debug mode so that the script panel works
+            return doEval();
+        } else {
+            try {
+                return doEval();
+            } catch (e) {
+                var info;
 
-            if (elem.nodeName) {
-                info = elem.nodeName.toLowerCase();
+                if (elem.nodeName) {
+                    info = elem.nodeName.toLowerCase();
 
-                if (elem.id != null && elem.id.length > 0) {
-                    info += "#" + elem.id;
+                    if (elem.id != null && elem.id.length > 0) {
+                        info += "#" + elem.id;
+                    }
+                } else {
+                    info = JSON.stringify(code);
                 }
-            } else {
-                info = JSON.stringify(code);
-            }
 
-            Khan.error("Error while evaluating " + info, e);
+                Khan.error("Error while evaluating " + info, e);
+            }
         }
     },
 
@@ -333,42 +308,6 @@ $.fn.tmplLoad = function(problem, info) {
     if (localMode) {
         $.tmpl.VARS = VARS;
     }
-};
-
-$.fn.tmplCleanup = function() {
-    // This gets called before each problem. In some cases, before the first
-    // problem, MathJax isn't loaded yet. No worries--there's nothing to clean
-    // up anyway
-    if (typeof MathJax === "undefined") {
-        KhanUtil.debugLog("MathJax undefined in Cleanup");
-        return;
-    }
-
-    this.find("code").each(function() {
-        KhanUtil.debugLog("cleaning up: " + $(this).text());
-        var jax = MathJax.Hub.getJaxFor(this);
-        KhanUtil.debugLog("got jax of type " + $.type(jax));
-        if (jax) {
-            var e = jax.SourceElement();
-            KhanUtil.debugLog("source element is type " + $.type(e));
-            if ("outerHTML" in e) {
-                KhanUtil.debugLog("source element " + e.outerHTML);
-            } else {
-                KhanUtil.debugLog("no source element");
-            }
-
-            if (e.previousSibling && e.previousSibling.className) {
-                jax.Remove();
-            } else {
-                // MathJax chokes if e.previousSibling is a text node, which it
-                // is if tmplCleanup is called before MathJax's typesetting
-                // finishes
-                KhanUtil.debugLog("previousSibling isn't an element");
-            }
-
-            KhanUtil.debugLog("removed!");
-        }
-    });
 };
 
 $.fn.tmpl = function() {

@@ -2,18 +2,28 @@
 <html data-require="math graphie word-problems interactive subhints">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Area of triangles 1</title>
+    <title>Area of triangles</title>
     <script src="../khan-exercise.js"></script>
 </head>
 <body>
 <div class="exercise">
     <div class="vars">
         <var id="UNIT,UNIT_TEXT">randFromArray([
-            ["in", "inch"],
-            ["ft", "foot"],
-            ["m", "meter"],
-            ["cm", "centimeter"],
-            ["", "unit"]
+            ["in", new Plural(function(num) {
+                return $.ngettext("inch", "inches", num);
+            })],
+            ["ft", new Plural(function(num) {
+                return $.ngettext("foot", "feet", num);
+            })],
+            ["m", new Plural(function(num) {
+                return $.ngettext("meter", "meters", num);
+            })],
+            ["cm", new Plural(function(num) {
+                return $.ngettext("centimeter", "centimeters", num);
+            })],
+            ["", new Plural(function(num) {
+                return $.ngettext("unit", "units", num);
+            })]
         ])</var>
     </div>
     <div class="problems">
@@ -22,6 +32,7 @@
                 <var id="B">randRange(2, 9)</var>
                 <var id="H">randRange(2, 9)</var>
                 <var id="HYP">sqrt(B * B + H * H)</var>
+                <var id="AREA">$._("area")</var>
             </div>
 
             <p class="question">
@@ -45,7 +56,7 @@
 
             <div class="solution" data-type="multiple">
                 <span class="sol" data-forms="integer"><var>(B * H) / 2</var></span>
-                square <var>plural(UNIT_TEXT)</var>
+                square <var>plural_form(UNIT_TEXT)</var>
             </div>
 
             <div class="hints">
@@ -65,11 +76,15 @@
                         });
                     </div>
                     <p>
-                        The base of the triangle is
-                        <var>pluralTex(B, UNIT_TEXT)</var> and the height is
-                        <var>pluralTex(H, UNIT_TEXT)</var>, so the area of the
+                        <span data-if="isSingular(B)">The base of the triangle is
+                        <code><var>B</var></code> <var>UNIT_TEXT</var>.</span><span data-else="">The base of the triangle is
+                        <code><var>B</var></code> <var>plural_form(UNIT_TEXT, B)</var>.</span>
+                        <span data-if="isSingular(H)">The height of the triangle is
+                        <code><var>H</var></code> <var>UNIT_TEXT</var>.</span><span data-else="">The height of the triangle is
+                        <code><var>H</var></code> <var>plural_form(UNIT_TEXT, H)</var>.</span>
+                        <span>Thus the area of the
                         <em>rectangle</em> shown above is <code><var>B</var>
-                        \times <var>H</var></code>.
+                        \times <var>H</var></code>.</span>
                     </p>
                 </div>
                 <p>
@@ -78,21 +93,22 @@
                     <code><var>B</var> \times <var>H</var></code>.
                 </p>
                 <p><code>
-                    \text{area} = \frac{1}{2} \times <var>B</var> \times
+                    \text{<var>AREA</var>} = \frac{1}{2} \times <var>B</var> \times
                     <var>H</var> = <var>(B * H) / 2</var>
                 </code></p>
             </div>
         </div>
 
         <div id="acute-triangle" data-weight="2">
-            <div class="vars" data-ensure="((B % 2 === 0) || (H % 2 === 0)) &&
-                    (H !== HYP) && B !== TOP">
+            <div class="vars" data-ensure="((B % 2 === 0) || (H % 2 === 0)) &amp;&amp;
+                    (H !== HYP) &amp;&amp; B !== TOP">
                 <var id="B">randRange(3, 9)</var>
                 <var id="H">randRange(2, 9)</var>
                 <var id="HYP">
                     randRange(H + 1, floor(sqrt(H * H + B * B) - 1))
                 </var>
                 <var id="TOP">sqrt(HYP * HYP - H * H)</var>
+                <var id="AREA">$._("area")</var>
             </div>
 
             <p class="question">
@@ -119,7 +135,7 @@
 
             <div class="solution" data-type="multiple">
                 <span class="sol" data-forms="integer"><var>(B * H) / 2</var></span>
-                square <var>plural(UNIT_TEXT)</var>
+                square <var>plural_form(UNIT_TEXT)</var>
             </div>
 
             <div class="hints">
@@ -149,11 +165,15 @@
                             TOP / B &gt; 0.5 ? "left" : "left");
                     </div>
                     <p>
-                        The base of the triangle is
-                        <var>pluralTex(B, UNIT_TEXT)</var> and the height is
-                        <var>pluralTex(H, UNIT_TEXT)</var>, so the area of the
+                        <span data-if="isSingular(B)">The base of the triangle is
+                        <code><var>B</var></code> <var>UNIT_TEXT</var>.</span><span data-else="">The base of the triangle is
+                        <code><var>B</var></code> <var>plural_form(UNIT_TEXT, B)</var>.</span>
+                        <span data-if="isSingular(H)">The height of the triangle is
+                        <code><var>H</var></code> <var>UNIT_TEXT</var>.</span><span data-else="">The height of the triangle is
+                        <code><var>H</var></code> <var>plural_form(UNIT_TEXT, H)</var>.</span>
+                        <span>Thus the area of the
                         <em>rectangle</em> shown above is <code><var>B</var>
-                        \times <var>H</var></code>.
+                        \times <var>H</var></code>.</span>
                     </p>
                 </div>
                 <div>
@@ -212,7 +232,7 @@
                     </div>
                 </div>
                 <p><code>
-                    \text{area} = \frac{1}{2} \times <var>B</var> \times
+                    \text{<var>AREA</var>} = \frac{1}{2} \times <var>B</var> \times
                     <var>H</var> = <var>(B * H) / 2</var>
                 </code></p>
             </div>
@@ -226,6 +246,9 @@
                     randRange(-5, -1),
                     randRange(B + 1, B + 5)
                 ])</var>
+            <var id="BASE">$._("base")</var>
+            <var id="HEIGHT">$._("height")</var>
+            <var id="AREA">$._("area")</var>
             </div>
 
             <p class="question">
@@ -259,23 +282,26 @@
 
             <div class="solution" data-type="multiple">
                 <span class="sol" data-forms="integer"><var>(B * H) / 2</var></span>
-                square <var>plural(UNIT_TEXT)</var>
+                square <var>plural_form(UNIT_TEXT)</var>
             </div>
 
             <div class="hints">
                 <p>
                     The area of any triangle is
                     <code>\frac{1}{2}
-                    \text{base} \times \text{height}</code>.
+                    \text{<var>BASE</var>} \times \text{<var>HEIGHT</var>}</code>.
                     <br>
                 </p>
                 <p>
-                    The base of the triangle is
-                    <var>pluralTex(B, UNIT_TEXT)</var> and the height is
-                    <var>pluralTex(H, UNIT_TEXT)</var>.
+                    <span data-if="isSingular(B)">The base of the triangle is
+                    <code><var>B</var></code> <var>UNIT_TEXT</var>.</span><span data-else="">The base of the triangle is
+                    <code><var>B</var></code> <var>plural_form(UNIT_TEXT, B)</var>.</span>
+                    <span data-if="isSingular(H)">The height of the triangle is
+                    <code><var>H</var></code> <var>UNIT_TEXT</var>.</span><span data-else="">The height of the triangle is
+                    <code><var>H</var></code> <var>plural_form(UNIT_TEXT, H)</var>.</span>
                 </p>
                 <p><code>
-                    \text{area} = \frac{1}{2} \times <var>B</var> \times
+                    \text{<var>AREA</var>} = \frac{1}{2} \times <var>B</var> \times
                     <var>H</var> = <var>(B * H) / 2</var>
                 </code></p>
             </div>

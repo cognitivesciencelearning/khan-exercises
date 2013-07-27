@@ -88,9 +88,9 @@
             return (SEQUENCE.match(RegExp("(?=" + result + ")", "g")) || []).length
         })</var>
         <var id="CHOICES">[
-            'Fair coin',
-            'Unfair coin',
-            'Human guesses'
+            $._("Fair coin"),
+            $._("Unfair coin"),
+            $._("Human guesses")
         ]</var>
     </div>
 
@@ -99,8 +99,8 @@
         <div style="overflow: hidden; width: 496px;">
             <div id="charts">
                 <div data-each="SEQUENCE.split('') as FLIP">
-                    <div data-if="FLIP === 'H'" class="heads">H</div>
-                    <div data-else class="tails">T</div>
+                    <div class="heads" data-if="FLIP === 'H'">H</div>
+                    <div class="tails" data-else="">T</div>
                 </div>
                 <div class="graphie chart" id="chart-1">
                     init({
@@ -143,7 +143,7 @@
                         range: [[0, 16], [0, 6]],
                         scale: [31, 54]
                     });
-                    label([8, 6], "Two-flip streaks", "below", false).css({
+                    label([8, 6], $._("Two-flip streaks"), "below", false).css({
                         "font-size": "16px",
                         "color": "#444444"
                     });
@@ -175,7 +175,7 @@
                         range: [[0, 16], [0, 6]],
                         scale: [31, 54]
                     });
-                    label([8, 6], "Three-flip streaks", "below", false).css({
+                    label([8, 6], $._("Three-flip streaks"), "below", false).css({
                         "font-size": "16px",
                         "color": "#444444"
                     });
@@ -206,7 +206,7 @@
         </div>
         <p class="view-patterns">View patterns:
             <span class="pattern-tabs">
-                <a href="javascript:void(0);" id="show-flips" data-offset="0" class="selected">Coin flips</a> |
+                <a href="javascript:void(0);" class="selected" id="show-flips" data-offset="0">Coin flips</a> |
                 <a href="javascript:void(0);" id="show-chart-1" data-offset="1">H vs T</a> |
                 <a href="javascript:void(0);" id="show-chart-2" data-offset="2">Two-flip streaks</a> |
                 <a href="javascript:void(0);" id="show-chart-3" data-offset="3">Three-flip streaks</a>

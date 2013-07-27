@@ -10,7 +10,7 @@ var { font-style: normal; }
 .hint_gray { color: gray; }
 .hint_purple{ color: #9D38BD; }
 
-.final_answer { font-weight: bold; }
+.last-hint { font-weight: bold; }
 
 div.subhint {
     border: 1px solid #aaaaaa;
@@ -70,11 +70,11 @@ div.definition {
 #tester-info { border: 1px solid #AAA; background: #F0F0F0; padding: 10px; margin: 10px 0; }
 #debug var { font: 14px Menlo, Courier, monospace; word-wrap: break-word; }
 
-code { font-family: Helvetica, Arial; }
+code { font-family: Menlo, Courier, monospace; }
 table.limit { margin: 5px; }
 table.limit th { font-weight: bold; text-align: center; }
 table.limit td { border: 1px solid #AAA; }
-table.limit th, td { padding: 5px; }
+table.limit th, table.limit td { padding: 5px; }
 table.limit th:first-child { text-align: right; }
 
 #answer_area input[type=text],
@@ -119,7 +119,7 @@ table.limit th:first-child { text-align: right; }
 .radical .overline { border-top: 1px solid #000; padding: 6px 1px 0 3px; margin-left: -1px; }
 #answer_area .radical input[type=text],
 #answer_area .radical input[type=number] {
-    width: 30px;
+    width: 40px;
 }
 
 body.debug .graphie { outline: 1px dashed #fdd; }
@@ -128,12 +128,12 @@ body.debug .graphie { outline: 1px dashed #fdd; }
 #scratchpad { padding-left: 20px; overflow: hidden; display: none; }
 #scratchpad div { position: absolute; margin-top: -20px; z-index: 1; min-width: 514px; height: 98%; outline: 1px solid #ccc; }
 #scratchpad-not-available { display: none; }
+#extras .report-issue-link { float: right; font-size: 11px; }
 
 #tester-info.info-box { background: #f2e4bf; }
 #tester-info .box { border: 1px solid black; padding: 2px 4px; margin-left: 5px; }
 #tester-info .group-box { border: 1px solid #aaa; padding: 6px 4px 6px 0px; margin-left: 2px; }
 
-.summary { display: none; }
 #browserwarning { background: white; margin: 0 1px; padding: 18px; font-size: 120%; text-align: center; }
 
 #answer_area .answer-buttons input.simple-button,
@@ -143,6 +143,7 @@ body.debug .graphie { outline: 1px dashed #fdd; }
 #answer_area #answercontent { position: relative; z-index: 2; }
 #answer_area .hint-box { position: relative; z-index: 1;}
 #answer_area #examples-show {
+  display: none;
   float: right;
   margin-top: -2px;
   background: #F7F7F7;
@@ -263,9 +264,7 @@ body.debug .graphie { outline: 1px dashed #fdd; }
 #hint-remainder { color: #777; }
 
 #footer .simple-button, .info-box .simple-button { padding: 3px 10px; top: -1px }
-.info-box .simple-button { top:  0; );
-
-}
+.info-box .simple-button { top: 0; }
 
 #issue #issue-status.error { font-weight: bold; color: #A21; font-size: 1.2em; }
 #issue-link { font-style: italic; }
@@ -871,4 +870,18 @@ span.hover-hint:hover {
 #solutionarea table.rational-exp td.soln-bot {
     padding-top: 1px;
     border-top: 1px solid black;
+}
+
+body.debug span.error {
+    font-weight: bold;
+    color: #FFF;
+    background: #F00;
+    font-size: 1.4em;
+    padding: 0.2em;
+    text-decoration: line-through;
+}
+
+/* Work around bug added in https://khanacademy.kilnhg.com/Review/K109777 */
+.MathJax .math {
+    color: inherit;
 }
